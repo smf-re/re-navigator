@@ -582,11 +582,15 @@ const ASSETS=[
 ];
 
 const FIN_REFS=[
-  {name:'定期預金',x:.2,y:.3,r:4},{name:'個人向け国債',x:.5,y:.8,r:4},
-  {name:'J-REIT',x:4,y:4.5,r:4},{name:'日本株インデックス',x:7,y:7,r:4},
-  {name:'S&P500（円建て）',x:9,y:9,r:4},{name:'ゴールド',x:5.5,y:5,r:4},
-  {name:'HYボンド',x:6,y:6.5,r:4},{name:'PEファンド',x:7.5,y:13,r:4},
-  {name:'VCファンド',x:9.5,y:18,r:4},
+  {name:'定期預金',en:'Fixed Deposit',x:.2,y:.3,r:4},
+  {name:'個人向け国債',en:'JGB (Retail)',x:.5,y:.8,r:4},
+  {name:'J-REIT',en:'J-REIT',x:4,y:4.5,r:4},
+  {name:'日本株インデックス',en:'Japan Stock Index',x:7,y:7,r:4},
+  {name:'S&P500（円建て）',en:'S&P500 (JPY)',x:9,y:9,r:4},
+  {name:'ゴールド',en:'Gold',x:5.5,y:5,r:4},
+  {name:'HYボンド',en:'HY Bond',x:6,y:6.5,r:4},
+  {name:'PEファンド',en:'PE Fund',x:7.5,y:13,r:4},
+  {name:'VCファンド',en:'VC Fund',x:9.5,y:18,r:4},
 ];
 
 function score(a){
@@ -807,10 +811,11 @@ function drawResChart(ranked){
   const topIds=new Set(ranked.slice(0,4).map(a=>a.id));
   const reDs=ASSETS.map(a=>{
     const isTop=topIds.has(a.id);
-    return{label:a.name,data:[{x:a.mapX,y:a.mapY,r:isTop?a.mapR:Math.max(a.mapR*0.45,3)}],
+    const aLabel=LANG==='en'&&ASSET_EN[a.id]?ASSET_EN[a.id].name:a.name;
+    return{label:aLabel,data:[{x:a.mapX,y:a.mapY,r:isTop?a.mapR:Math.max(a.mapR*0.45,3)}],
       backgroundColor:isTop?a.mapC+'cc':'#d4bfa655',borderColor:isTop?a.mapC:'#d4bfa6',borderWidth:isTop?2:0.5};
   });
-  const finDs={label:'金融商品',data:FIN_REFS.map(f=>({x:f.x,y:f.y,r:f.r,label:f.name})),
+  const finDs={label:LANG==='en'?'Financial Products':'金融商品',data:FIN_REFS.map(f=>({x:f.x,y:f.y,r:f.r,label:LANG==='en'?(f.en||f.name):f.name})),
     backgroundColor:'#9a8c8244',borderColor:'#9a8c82',borderWidth:1};
   _resChart=new Chart(canvas,{type:'bubble',data:{datasets:[...reDs,finDs]},options:{
     responsive:true,maintainAspectRatio:false,
@@ -876,9 +881,9 @@ function showSection(id,btn){
 let _mainChart=null;
 function initMap(){
   if(_mainChart)return;
-  const reDs=ASSETS.map(a=>({label:a.name,data:[{x:a.mapX,y:a.mapY,r:a.mapR}],
+  const reDs=ASSETS.map(a=>({label:LANG==='en'?(ASSET_EN[a.id]?ASSET_EN[a.id].name:a.name):a.name,data:[{x:a.mapX,y:a.mapY,r:a.mapR}],
     backgroundColor:a.mapC+'bb',borderColor:a.mapC,borderWidth:1.5}));
-  const finDs={label:'金融商品（参照）',data:FIN_REFS.map(f=>({x:f.x,y:f.y,r:f.r,label:f.name})),
+  const finDs={label:LANG==='en'?'Financial Products (ref)':'金融商品（参照）',data:FIN_REFS.map(f=>({x:f.x,y:f.y,r:f.r,label:LANG==='en'?(f.en||f.name):f.name})),
     backgroundColor:'#9a8c8266',borderColor:'#9a8c82',borderWidth:1};
   _mainChart=new Chart(document.getElementById('bc'),{type:'bubble',data:{datasets:[...reDs,finDs]},options:{
     responsive:true,maintainAspectRatio:false,
@@ -898,19 +903,37 @@ const CAT_LABELS={capital:'キャピタル',hedge:'ヘッジ',tax:'節税',cashf
 const CAT_STYLES={capital:{bg:'#e8eef5',tc:'#2d4a6b'},hedge:{bg:'#fdf0ec',tc:'#8b4a35'},tax:{bg:'#fdf5e6',tc:'#7a5c1e'},cashflow:{bg:'#edf5ed',tc:'#2d4a2d'}};
 let currentFilt='all';
 function initComp(){renderComp();}
+const CAT_LABELS_EN={capital:'Capital',hedge:'Hedge',tax:'Tax',cashflow:'High CF'};
+const COMP_EN={
+  prime:{irr:'10–14%',compare:'Gold + PE Fund (LBO)',pro:'Inflation hedge × leverage in one structure',con:'Inflation thesis dependent / illiquid',inv:'UHNW / Family Office / Long-term corp'},
+  valueadd:{irr:'12–18%',compare:'Mid-size PE Fund',pro:'High IRR / create value / short-term exit',con:'Execution risk / hard to finance / hands-on',inv:'RE PE / Experienced individual'},
+  ippan:{irr:'4–8% (by area)',compare:'J-REIT / Bonds / Life insurance',pro:'Easy financing / depreciation / estate reduction',con:'No yield in Tokyo / limited regional exit',inv:'Landowners / regional wealthy / estate planners'},
+  kubun:{irr:'2–3% actual / 4–6% w/ tax',compare:'Fixed deposit / JGB',pro:'Easiest financing / passive / estate entry',con:'No yield justification / tax purpose only',inv:'Salaried workers / estate planning beginners'},
+  ultra:{irr:'6–8%',compare:'Gold / Art / Collectibles',pro:'Irreplaceable scarcity / income + estate reduction',con:'Ultra-high ticket / near-zero liquidity',inv:'UHNW (net assets ¥5B+)'},
+  wood:{irr:'5–8% incl. tax',compare:'Aircraft leasing / iDeCo',pro:'Maximum tax benefit / stays as real asset',con:'Exit planning essential / tax reversal on sale',inv:'Physicians / lawyers / high-income earners'},
+  minpaku:{irr:'12–20%',compare:'FX / Crypto / Social lending',pro:'15–25% at high occupancy / inbound exposure',con:'Regulatory risk / cash only / high ops burden',inv:'Cash-rich individuals / operator investors'},
+  serviced:{irr:'8–12%',compare:'High-dividend stocks / Income ETF',pro:'Stable corporate demand / lower ops than STR',con:'Hard to finance long-term / FX risk',inv:'Cash-rich individuals / foreign corp market'},
+};
 function renderComp(){
   const tbody=document.getElementById('ctbody');tbody.innerHTML='';
   const rows=currentFilt==='all'?ASSETS:ASSETS.filter(a=>a.cat===currentFilt);
+  const isEn=LANG==='en';
   rows.forEach(a=>{
-    const r=a.compRow;const cs=CAT_STYLES[a.cat]||{bg:'#f5ede2',tc:'#5a4f47'};
+    const r=a.compRow;const ce=COMP_EN[a.id]||{};
+    const cs=CAT_STYLES[a.cat]||{bg:'#f5ede2',tc:'#5a4f47'};
+    const catLabel=isEn?(CAT_LABELS_EN[a.cat]||CAT_LABELS[a.cat]):CAT_LABELS[a.cat];
+    const aeName=isEn&&ASSET_EN[a.id]?ASSET_EN[a.id].name:a.name;
+    const aeSub=isEn&&ASSET_EN[a.id]?ASSET_EN[a.id].sub:a.sub;
     const tr=document.createElement('tr');
     tr.innerHTML=`
-      <td><span class="tpill" style="background:${cs.bg};color:${cs.tc}">${CAT_LABELS[a.cat]}</span>
-          <div class="tname">${a.name}</div><div class="tsub">${a.sub}</div></td>
-      <td style="font-weight:500">${r.irr}</td>
-      <td>${lbar(r.loan,r.lc)}<span style="font-size:11px;color:${r.lc};margin-top:3px;display:block">${r.ll}</span></td>
-      <td><span style="font-size:12px;white-space:pre-line">${r.compare}</span></td>
-      <td class="tpro">${r.pro}</td><td class="tcon">${r.con}</td><td class="tnote">${r.inv}</td>`;
+      <td><span class="tpill" style="background:${cs.bg};color:${cs.tc}">${catLabel}</span>
+          <div class="tname">${aeName}</div><div class="tsub">${aeSub}</div></td>
+      <td style="font-weight:500">${isEn?(ce.irr||r.irr):r.irr}</td>
+      <td>${lbar(r.loan,r.lc)}<span style="font-size:11px;color:${r.lc};margin-top:3px;display:block">${isEn&&ASSET_EN[a.id]?ASSET_EN[a.id].ll:r.ll}</span></td>
+      <td><span style="font-size:12px;white-space:pre-line">${isEn?(ce.compare||r.compare):r.compare}</span></td>
+      <td class="tpro">${isEn?(ce.pro||r.pro):r.pro}</td>
+      <td class="tcon">${isEn?(ce.con||r.con):r.con}</td>
+      <td class="tnote">${isEn?(ce.inv||r.inv):r.inv}</td>`;
     tbody.appendChild(tr);
   });
 }
@@ -1006,6 +1029,42 @@ function toggleLang(){
 
 function applyLang(){
   const isEn = LANG==='en';
+  // Update map chart axis labels in place
+  if(window._mapDone && _mainChart){
+    const isEn=LANG==='en';
+    _mainChart.options.scales.x.title.text=isEn?'Risk Level (liquidity / volatility)':'リスク水準（流動性・変動性）';
+    _mainChart.options.scales.y.title.text=isEn?'Expected IRR (after tax, %)':'期待IRR（税引後・%）';
+    // Update dataset labels and tooltip data
+    _mainChart.data.datasets.forEach((ds,i)=>{
+      if(i<ASSETS.length){
+        const a=ASSETS[i];
+        ds.label=isEn&&ASSET_EN[a.id]?ASSET_EN[a.id].name:a.name;
+        ds.data=[{x:a.mapX,y:a.mapY,r:a.mapR}];
+      } else {
+        ds.label=isEn?'Financial Products (ref)':'金融商品（参照）';
+        ds.data=FIN_REFS.map(f=>({x:f.x,y:f.y,r:f.r,label:isEn?(f.en||f.name):f.name}));
+      }
+    });
+    _mainChart.update();
+  }
+  // Re-render comparison table
+  if(window._compDone) renderComp();
+  // Update result chart axis labels in place
+  if(_resChart){
+    const isEn=LANG==='en';
+    _resChart.options.scales.x.title.text=isEn?'Risk Level':'リスク水準（流動性・変動性）';
+    _resChart.options.scales.y.title.text=isEn?'Expected IRR (after tax)':'期待IRR（税引後・%）';
+    _resChart.data.datasets.forEach((ds,i)=>{
+      if(i<ASSETS.length){
+        const a=ASSETS[i];
+        ds.label=isEn&&ASSET_EN[a.id]?ASSET_EN[a.id].name:a.name;
+      } else {
+        ds.label=isEn?'Financial Products':'金融商品';
+        ds.data=FIN_REFS.map(f=>({x:f.x,y:f.y,r:f.r,label:isEn?(f.en||f.name):f.name}));
+      }
+    });
+    _resChart.update();
+  }
   // Static elements
   document.querySelectorAll('[data-ja][data-en]').forEach(el=>{
     if(el.hasAttribute('data-sja')) return; // handled below
@@ -1095,7 +1154,7 @@ function applyResLang(){
     'リスク・リターンマップ上での位置付け':'Position on Risk / Return Map',
     'その他の候補':'Other Candidates',
     '条件を少し広げると、他にもあります':'Expand criteria slightly — more options:',
-    '条件を少し広げると、こんなアセットがあります":"Expand criteria slightly — here's what fits:',
+    '条件を少し広げると、こんなアセットがあります':'Expand criteria slightly — here\'s what fits:',
   };
   document.querySelectorAll('.res-section-label').forEach(el=>{
     if(!el.getAttribute('data-orig')) el.setAttribute('data-orig',el.textContent.trim());
