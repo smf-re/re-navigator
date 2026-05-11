@@ -994,5 +994,179 @@ async function submitForm(){
     </div>
   </div>
 </div>
+<script>
+
+// ============ i18n ============
+let LANG = 'ja';
+
+const ALABELS_EN=['¥500M','¥700M','¥1B','¥1.5B','¥2B','¥3B','¥5B','¥10B+'];
+const TLABELS_EN=['~¥10M','~¥20M','~¥30M','~¥50M','~¥100M','~¥200M','~¥300M','~¥500M','¥500M+'];
+const GL_EN={capital:'Capital Gain',hedge:'Inflation Hedge',tax:'Tax & Estate',cashflow:'High Cash Flow'};
+const EL_EN={personal:'Individual',corp:'Corporate',both:'Undecided'};
+const HL_EN={short:'3–5 yrs',mid:'5–12 yrs',long:'12+ yrs',perm:'Permanent'};
+
+const ASSET_EN={
+  prime:{name:'Prime Urban Residential Block',sub:'Minato / Shibuya / Meguro — RC new build',tagLabel:'Inflation Hedge × Capital',irr:'10–14%',hor:'12–15 yrs',ll:'◎ LTV 65–75%',compare:'Physical Gold + PE Fund (LBO)',pros:['Inflation hedge + leverage in one structure','Rental income + holds as real asset','Substitute for gold / PE alternatives'],cons:['Dependent on inflation continuing 12–15 yrs','IRR drops sharply on early exit','Extremely low liquidity']},
+  valueadd:{name:'Value-Add (Renovation / Conversion)',sub:'Pre-code, distressed, high-vacancy assets',tagLabel:'Capital Gain',irr:'12–18%',hor:'3–7 yrs',ll:'△ LTV 50–60%',compare:'Mid-size PE Fund',pros:['High IRR potential','Create value through management','Short-term exit possible'],cons:['High execution risk / hard to finance','High equity ratio required','Hands-on involvement needed']},
+  ippan:{name:'Residential Apartment Block',sub:'Greater Tokyo suburbs / Regional cities (Sapporo, Sendai, Nagoya, Osaka, Fukuoka)',tagLabel:'Tax × Estate Planning',irr:'4–6% (suburbs) / 5–8% (regional)',hor:'10–20 yrs',ll:'◎ LTV 70–80%',compare:'J-REIT / Bonds / Life insurance',pros:['Easy financing, high equity efficiency','Depreciation + estate valuation reduction','Fully delegable to PM'],cons:['Tokyo yields almost nil','Regional exit buyers limited','Only rational for tax/estate purposes']},
+  kubun:{name:'Urban Condo Unit',sub:'Minato / Shibuya / Meguro — 1–3BR up to ¥200M',tagLabel:'Tax × Estate (Entry Level)',irr:'2–3% actual / 4–6% incl. tax',hor:'10–20 yrs',ll:'◎◎ LTV 80–90%',compare:'Fixed deposit / JGB',pros:['Easiest financing — small entry point','Fully passive via PM','Good entry for estate planning'],cons:['Yield alone does not justify in Tokyo','Only rational for tax/estate goals','Single-property concentration risk']},
+  ultra:{name:'Ultra-Rare Premium Property',sub:'Aman Residences etc. — limited availability',tagLabel:'Scarcity Anchor',irr:'6–8% (stability focus)',hor:'Permanent / generational',ll:'△ PB credit / Lombard',compare:'Gold / Art / Collectibles',pros:['Irreplaceable scarcity — built for permanent hold','Income + stable value + estate reduction','PB credit line available for UHNW'],cons:['Ultra-high ticket / near-zero liquidity','Extremely limited buyer pool','No standard investment loan']},
+  wood:{name:'Wood-frame Apartment (Depreciation Tax)',sub:'New / aged wood-frame — 22yr useful life',tagLabel:'Tax Planning',irr:'5–8% incl. tax benefit',hor:'4–6 yrs (tax period)',ll:'◎ LTV 70–80%',compare:'Aircraft leasing / iDeCo / SME mutual aid',pros:['Maximum tax benefit, immediate effect','Stays as real asset unlike leasing','Easy to finance'],cons:['Exit strategy required after depreciation','Risk of large tax bill on sale','Return depends entirely on tax benefit']},
+  minpaku:{name:'Short-term Rental (Airbnb etc.)',sub:'Tourist areas / central Tokyo — inbound focus',tagLabel:'High CF (Cash only)',irr:'12–20% (occupancy-dependent)',hor:'3–7 yrs',ll:'✕ Cash purchase only',compare:'FX / Crypto / Social lending',pros:['15–25% yield at high occupancy','Stays as real asset','Direct inbound demand exposure'],cons:['Regulatory risk (180-day cap)','Cash only — no standard loan','High ops burden / variable occupancy']},
+  serviced:{name:'Serviced Apartment / Monthly Rental',sub:'Expat / corporate long-stay demand',tagLabel:'High CF (Corporate demand)',irr:'8–12%',hor:'5–10 yrs',ll:'△ LTV 50–60% (business loan)',compare:'High-dividend stocks / Income ETF',pros:['Stable corporate demand / long-term contracts','Lower ops burden than short-term rental','Suited for foreign corporate market'],cons:['Hard to get long-term loans','Occupancy / FX risk','Higher interest on business loans']},
+};
+
+const ASSET_EN_NOTE={
+  personal:{prime:'Long-term hold qualifies for ~20% separate taxation. Estate valuation reduction also expected.',valueadd:'Sale within 5 yrs subject to full income tax. Separate taxation applies after 5 yrs.',ippan:'Individual ownership most efficient for estate/gift. Debt-backed valuation reduction possible.',kubun:'Investment loan fully available for individuals. Good entry for estate reduction and tax.',ultra:'Individual ownership standard for estate tax planning. Maximum valuation reduction effect.',wood:'Losses offset against employment/business income. More effective for higher income brackets.',minpaku:'Individual minpaku registration available. Income as misc. or business income.',serviced:'Can operate as individual business rental.'},
+  corp:{prime:'Depreciation offsettable against corporate income. Watch double taxation on exit.',valueadd:'Corporate structure natural for active development. Broad expense deduction available.',ippan:'Effective when depreciation offsets corporate income. Watch double taxation on exit.',kubun:'Corporate housing loan not available. Investment loan terms differ — consult advisor.',ultra:'Corporate ownership requires careful analysis of share valuation impact.',wood:'Offset against corporate tax. Design alongside executive compensation.',minpaku:'Corporate registration possible. Consumption tax and social insurance setup required.',serviced:'Corporate structure natural for revenue receipt and expense deduction.'},
+  both:{prime:'Both individual and corporate viable. Consult on tax structure and exit strategy.',valueadd:'Choose individual or corporate based on tax rate and purpose.',ippan:'Choose individual or corporate based on goals.',kubun:'Individual first recommended. Corporate terms differ significantly.',ultra:'Individual ownership is the default. Corporate case-by-case.',wood:'Effective for both high-income individuals and high-profit corporations.',minpaku:'Choose individual or corporate based on operations.',serviced:'Choose based on scale of operation.'},
+};
+
+function toggleLang(){
+  LANG = LANG==='ja' ? 'en' : 'ja';
+  const btn = document.getElementById('lang-btn');
+  if(btn) btn.textContent = LANG==='ja' ? 'EN' : 'JA';
+  applyLang();
+}
+
+function applyLang(){
+  const isEn = LANG==='en';
+  // Static elements
+  document.querySelectorAll('[data-ja][data-en]').forEach(el=>{
+    if(el.hasAttribute('data-sja')) return; // handled below
+    const val = isEn ? el.getAttribute('data-en') : el.getAttribute('data-ja');
+    if(val!==null) el.innerHTML = val;
+  });
+  document.querySelectorAll('[data-sja]').forEach(el=>{
+    const main = isEn ? el.getAttribute('data-en') : el.getAttribute('data-ja');
+    const sub  = isEn ? el.getAttribute('data-sen') : el.getAttribute('data-sja');
+    if(main!==null) el.innerHTML = main + (sub ? '<small>'+sub+'</small>' : '');
+  });
+  // Slider values
+  const av=document.getElementById('av');
+  if(av) av.textContent = isEn ? ALABELS_EN[st.ai] : ALABELS[st.ai];
+  const tv=document.getElementById('tv');
+  if(tv) tv.textContent = isEn ? TLABELS_EN[st.ti] : TLABELS[st.ti];
+  // Result cards if already rendered
+  applyResLang();
+}
+
+function applyResLang(){
+  const isEn = LANG==='en';
+  const AL = isEn ? ALABELS_EN : ALABELS;
+  const TL = isEn ? TLABELS_EN : TLABELS;
+  const GLx = isEn ? GL_EN : GL;
+  const ELx = isEn ? EL_EN : EL;
+  const HLx = isEn ? HL_EN : HL;
+
+  // Summary chips
+  const sc=document.querySelector('.res-summary');
+  if(sc && st.entity){
+    sc.innerHTML=
+      '<span class="res-chip">'+(isEn?'Net Assets':'純資産')+' '+AL[st.ai]+'</span>'+
+      '<span class="res-chip">'+(isEn?'Equity':'自己資金')+' '+TL[st.ti]+'</span>'+
+      '<span class="res-chip">'+st.goals.map(g=>GLx[g]).join(' / ')+'</span>'+
+      '<span class="res-chip">'+ELx[st.entity]+'</span>'+
+      '<span class="res-chip">'+(isEn?'Hold':'保有')+' '+HLx[st.horizon]+'</span>';
+  }
+
+  // Asset cards
+  document.querySelectorAll('[data-asset-id]').forEach(card=>{
+    const id=card.getAttribute('data-asset-id');
+    if(!id) return;
+    const ae=ASSET_EN[id]; if(!ae) return;
+    const origA=ASSETS.find(a=>a.id===id); if(!origA) return;
+    const n=card.querySelector('.res-name,.alt-name');
+    if(n) n.textContent=isEn?ae.name:origA.name;
+    const s=card.querySelector('.res-sub,.alt-sub');
+    if(s) s.textContent=isEn?ae.sub:origA.sub;
+    card.querySelectorAll('.mrow,.alt-mrow').forEach(row=>{
+      const k=row.querySelector('.mk');
+      const v=row.querySelector('.mv,.alt-mv');
+      if(!k||!v) return;
+      const kt=k.textContent.trim();
+      const jaMap={'期待IRR':'Expected IRR','推奨保有期間':'Holding Period','比較商品':'Comparable','融資':'Financing'};
+      const enMap={'Expected IRR':'期待IRR','Holding Period':'推奨保有期間','Comparable':'比較商品','Financing':'融資'};
+      if(isEn && jaMap[kt]) k.textContent=jaMap[kt];
+      else if(!isEn && enMap[kt]) k.textContent=enMap[kt];
+      if((kt==='期待IRR'||kt==='Expected IRR')) v.textContent=isEn?ae.irr:origA.irr;
+      if((kt==='推奨保有期間'||kt==='Holding Period')) v.textContent=isEn?ae.hor:origA.hor;
+      if((kt==='比較商品'||kt==='Comparable')) v.textContent=isEn?(ae.compare||''):(origA.compare||'');
+    });
+    if(ae.pros){
+      card.querySelectorAll('.check-item.pro span:last-child').forEach((el,i)=>{
+        if(isEn&&ae.pros[i]) el.textContent=ae.pros[i];
+        else if(!isEn&&origA.pros&&origA.pros[i]) el.textContent=origA.pros[i];
+      });
+    }
+    if(ae.cons){
+      card.querySelectorAll('.check-item.con span:last-child').forEach((el,i)=>{
+        if(isEn&&ae.cons[i]) el.textContent=ae.cons[i];
+        else if(!isEn&&origA.cons&&origA.cons[i]) el.textContent=origA.cons[i];
+      });
+    }
+    const note=card.querySelector('.entity-note');
+    if(note&&st.entity){
+      if(isEn&&ASSET_EN_NOTE[st.entity]&&ASSET_EN_NOTE[st.entity][id])
+        note.innerHTML='<strong>'+ELx[st.entity]+':</strong> '+ASSET_EN_NOTE[st.entity][id];
+      else if(!isEn&&origA.en&&origA.en[st.entity])
+        note.innerHTML='<strong>'+EL[st.entity]+'取得:</strong> '+origA.en[st.entity];
+    }
+  });
+
+  // Section labels
+  const labelMap={
+    '提案アセット（マッチ度順）':'Proposals (best match first)',
+    'リスク・リターンマップ上での位置付け':'Position on Risk / Return Map',
+    'その他の候補':'Other Candidates',
+    '条件を少し広げると、他にもあります':'Expand criteria slightly — more options:',
+    '条件を少し広げると、こんなアセットがあります":"Expand criteria slightly — here's what fits:',
+  };
+  document.querySelectorAll('.res-section-label').forEach(el=>{
+    if(!el.getAttribute('data-orig')) el.setAttribute('data-orig',el.textContent.trim());
+    const orig=el.getAttribute('data-orig');
+    if(isEn&&labelMap[orig]) el.textContent=labelMap[orig];
+    else if(!isEn) el.textContent=orig;
+  });
+
+  const msub=document.querySelector('.res-map-sub');
+  if(msub){
+    msub.textContent=isEn
+      ?'Highlighted = proposed assets   Faded = others   Grey = financial product reference'
+      :'色付き強調＝提案アセット　薄いグレー＝その他の不動産　点線グレー＝金融商品参照線';
+  }
+  const ct=document.querySelector('.consult-cta-title');
+  if(ct) ct.textContent=isEn?'Consult with SMF':'SMFに相談する';
+  const cs=document.querySelector('.consult-cta-sub');
+  if(cs) cs.textContent=isEn?'Our advisor will reach out based on your profile.':'提案内容をもとに、担当者からご連絡いたします';
+  const cb=document.querySelector('.consult-btn');
+  if(cb) cb.textContent=isEn?'Request Free Consultation →':'無料相談を申し込む →';
+  const rb=document.querySelector('.restart-btn');
+  if(rb) rb.textContent=isEn?'← Start Over':'← 最初からやり直す';
+  const nrt=document.querySelector('.no-result-title');
+  if(nrt) nrt.textContent=isEn?'No match with current criteria':'現在の条件では該当なし';
+  const nrs=document.querySelector('.no-result-sub');
+  if(nrs) nrs.innerHTML=isEn
+    ?'No assets matched your inputs.<br>Please see the suggestions below.'
+    :'入力された条件の組み合わせでは提案できるアセットがありませんでした。<br>下記の「条件を少し広げると…」をご参考ください。';
+
+  // Map sub
+  const mns=document.querySelector('.map-container .chart-note');
+  if(mns) mns.textContent=isEn
+    ?'X-axis = Risk (liquidity / volatility)   Y-axis = Expected IRR (after tax)   Bubble size = min. investment   *SMF estimates'
+    :'横軸 = リスク水準（流動性・変動性）　縦軸 = 期待IRR（税引後）　バブルサイズ = 最低投資額の目安　※SMF推計値';
+}
+
+// Override slider events to respect lang
+document.getElementById('asl').oninput=function(){
+  st.ai=+this.value;
+  document.getElementById('av').textContent=LANG==='en'?ALABELS_EN[st.ai]:ALABELS[st.ai];
+};
+document.getElementById('tsl').oninput=function(){
+  st.ti=+this.value;
+  document.getElementById('tv').textContent=LANG==='en'?TLABELS_EN[st.ti]:TLABELS[st.ti];
+};
+
+</script>
 </body>
 </html>
