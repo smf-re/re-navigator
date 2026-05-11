@@ -491,7 +491,7 @@ const st={ai:0,goals:[],entity:'',ti:3,horizon:'',liq:''};
 const ms={g:[]};
 
 const ASSETS=[
-  {id:'prime',cat:'hedge',name:'プライムエリア一棟レジデンス',sub:'港区・渋谷区・目黒区 RC新築・築浅',
+  {id:'prime',illiq:3,cat:'hedge',name:'プライムエリア一棟レジデンス',sub:'港区・渋谷区・目黒区 RC新築・築浅',
    tagBg:'#fdf0ec',tagTc:'#8b4a35',tagLabel:'インフレヘッジ × キャピタル',
    irr:'10〜14%',hor:'12〜15年',minT:30000,loan:4,lc:'#3d6b52',ll:'◎ LTV 65〜75%',
    compare:'ゴールド＋PEファンド（LBO）',cats:['hedge','capital'],ents:['personal','corp','both'],
@@ -502,7 +502,7 @@ const ASSETS=[
    bdg:[{t:'RC新築',bg:'#fdf0ec',tc:'#8b4a35'},{t:'外国人駐在員市場',bg:'#eef6f1',tc:'#3d6b52'},{t:'LTV 65〜75%',bg:'#eaf0f8',tc:'#1e3a5f'}],
    mapX:5.5,mapY:12,mapR:14,mapC:'#8b4a35',minCash:0,
    compRow:{cat:'hedge',irr:'10〜14%',loan:4,lc:'#3d6b52',ll:'◎ LTV 65〜75%',compare:'ゴールド＋PEファンド',pro:'インフレヘッジ×レバレッジ同時実装',con:'インフレ継続命題依存・流動性極低',inv:'富裕層・FO・長期視点法人'}},
-  {id:'valueadd',cat:'capital',name:'バリューアッド（リノベ・用途転換）',sub:'旧耐震・中古・空室率高い物件',
+  {id:'valueadd',illiq:2,cat:'capital',name:'バリューアッド（リノベ・用途転換）',sub:'旧耐震・中古・空室率高い物件',
    tagBg:'#e8eef5',tagTc:'#2d4a6b',tagLabel:'キャピタルゲイン',
    irr:'12〜18%',hor:'3〜7年',minT:10000,loan:2,lc:'#c4705a',ll:'△ LTV 50〜60%',
    compare:'中小型PEファンド',cats:['capital'],ents:['personal','corp','both'],
@@ -513,10 +513,10 @@ const ASSETS=[
    bdg:[{t:'短〜中期',bg:'#e8eef5',tc:'#2d4a6b'},{t:'高リスク高リターン',bg:'#fdf0ec',tc:'#8b4a35'}],
    mapX:8,mapY:15,mapR:9,mapC:'#2d4a6b',minCash:0,
    compRow:{cat:'capital',irr:'12〜18%',loan:2,lc:'#c4705a',ll:'△ LTV 50〜60%',compare:'中小型PEファンド',pro:'高IRR・自分で価値創出・短期利確可能',con:'実行リスク大・融資困難・現金比率高め',inv:'不動産PE・経験豊富な個人'}},
-  {id:'ippan',cat:'tax',name:'一棟賃貸マンション',sub:'都内近郊・地方主要都市（札幌・仙台・名古屋・大阪・福岡等）',
-   tagBg:'#fdf5e6',tagTc:'#7a5c1e',tagLabel:'節税 × 相続対策',
-   irr:'実質4〜6%（近郊）\n5〜8%（地方）',hor:'10〜20年',minT:3000,loan:4,lc:'#3d6b52',ll:'◎ LTV 70〜80%',
-   compare:'J-REIT・長期社債\n生命保険・暦年贈与',cats:['tax','capital'],ents:['personal','corp','both'],
+  {id:'ippan',illiq:3,cat:'tax',name:'一棟賃貸マンション',sub:'東京23区・近郊・地方主要都市（札幌・仙台・名古屋・大阪・福岡等）',
+   tagBg:'#fdf5e6',tagTc:'#7a5c1e',tagLabel:'節税 × 相続 × インフレヘッジ',
+   irr:'実質4〜6%（近郊）\n5〜8%（地方）',hor:'10〜20年',minT:10000,loan:4,lc:'#3d6b52',ll:'◎ LTV 70〜80%',
+   compare:'J-REIT・長期社債\n生命保険・暦年贈与',cats:['tax','capital','hedge'],ents:['personal','corp','both'],
    hors:['mid','long','perm'],liqs:['mid','high'],
    pros:['融資つきやすく自己資金効率が高い','減価償却・相続評価圧縮を同時活用','管理委託でパッシブ運営可'],
    cons:['都内は利回りがほぼ出ない','地方は出口（買い手）が限定される','節税・相続目的でないなら合理性低い'],
@@ -524,7 +524,7 @@ const ASSETS=[
    bdg:[{t:'都内近郊',bg:'#fdf5e6',tc:'#7a5c1e'},{t:'地方主要都市',bg:'#fdf5e6',tc:'#7a5c1e'},{t:'融資◎',bg:'#eef6f1',tc:'#3d6b52'}],
    mapX:3.5,mapY:6,mapR:8,mapC:'#7a5c1e',minCash:0,
    compRow:{cat:'tax',irr:'4〜8%（エリア次第）',loan:4,lc:'#3d6b52',ll:'◎ LTV 70〜80%',compare:'J-REIT・長期社債\n生命保険・暦年贈与',pro:'融資◎・減価償却・相続評価圧縮の三拍子',con:'都内は利回り出ない・地方は出口リスク',inv:'地主・地方資産家・相続予定者'}},
-  {id:'kubun',cat:'tax',name:'都心区分マンション',sub:'港区・渋谷区・目黒区 1〜3LDK 〜2億円',
+  {id:'kubun',illiq:0,cat:'tax',name:'都心区分マンション',sub:'港区・渋谷区・目黒区 1〜3LDK 〜2億円',
    tagBg:'#fdf5e6',tagTc:'#7a5c1e',tagLabel:'節税 × 相続対策（入門）',
    irr:'実質2〜3%（都内）\n節税効果込み4〜6%',hor:'10〜20年',minT:1000,loan:5,lc:'#3d6b52',ll:'◎◎ LTV 80〜90%',
    compare:'定期預金・個人向け国債',cats:['tax'],ents:['personal','both'],
@@ -535,18 +535,18 @@ const ASSETS=[
    bdg:[{t:'2億円以下',bg:'#fdf5e6',tc:'#7a5c1e'},{t:'融資◎◎',bg:'#eef6f1',tc:'#3d6b52'},{t:'相続対策入門',bg:'#fdf5e6',tc:'#7a5c1e'}],
    mapX:2.5,mapY:3.5,mapR:5,mapC:'#7a5c1e',minCash:0,
    compRow:{cat:'tax',irr:'実質2〜3%（節税込み4〜6%）',loan:5,lc:'#3d6b52',ll:'◎◎ LTV 80〜90%',compare:'定期預金・個人向け国債',pro:'最も融資が出やすい・小口・完全パッシブ・相続評価圧縮',con:'純粋インカムとして成立しない・節税目的前提',inv:'会社員・個人投資家・相続対策入門層'}},
-  {id:'ultra',cat:'hedge',name:'超希少性プレミアム物件',sub:'アマンレジデンス等 限定物件',
+  {id:'ultra',illiq:3,cat:'hedge',name:'超希少性プレミアム物件',sub:'アマンレジデンス等 限定物件',
    tagBg:'#fdf0ec',tagTc:'#8b4a35',tagLabel:'希少性アンカー',
    irr:'6〜8%（評価安定重視）',hor:'永続〜次世代',minT:30000,loan:2,lc:'#c4705a',ll:'△ PB与信・ロンバード',
    compare:'ゴールド・美術品・コレクタブル',cats:['hedge'],ents:['personal','corp','both'],
-   hors:['perm'],liqs:['high'],
+   hors:['mid','long','perm'],liqs:['high'],
    pros:['再現不可能な希少性・永続保有に耐える','インカム+評価安定+相続圧縮の三拍子','資産家層はPB与信枠で対応可'],
    cons:['超高額・流動性ほぼゼロ','買い手が極めて限定的','通常投資用ローン不可'],
    en:{personal:'相続税対策として個人保有が基本。',corp:'法人保有は株式評価への影響を要精査。',both:'個人保有が原則。'},
    bdg:[{t:'UHNW専用',bg:'#fdf0ec',tc:'#8b4a35'},{t:'永続保有前提',bg:'#fdf0ec',tc:'#8b4a35'}],
-   mapX:3,mapY:7,mapR:20,mapC:'#8b4a35',minCash:0,minAsset:100,
+   mapX:3,mapY:7,mapR:20,mapC:'#8b4a35',minCash:0,minAsset:115,
    compRow:{cat:'hedge',irr:'6〜8%',loan:2,lc:'#c4705a',ll:'△ PB与信・ロンバード',compare:'ゴールド・美術品・コレクタブル',pro:'再現不可能な希少性。インカム+評価安定+相続圧縮',con:'超高額・流動性ほぼゼロ・通常ローン不可',inv:'純資産50億超のUHNW'}},
-  {id:'wood',cat:'tax',name:'木造アパート（減価償却節税）',sub:'新築・築古木造 耐用年数22年活用',
+  {id:'wood',illiq:1,cat:'tax',name:'木造アパート（減価償却節税）',sub:'新築・築古木造 耐用年数22年活用',
    tagBg:'#fdf5e6',tagTc:'#7a5c1e',tagLabel:'節税',
    irr:'節税効果込み5〜8%',hor:'4〜6年（節税期間）',minT:3000,loan:4,lc:'#3d6b52',ll:'◎ LTV 70〜80%',
    compare:'航空機オペリース・iDeCo・小規模企業共済',cats:['tax'],ents:['personal','corp','both'],
@@ -557,7 +557,7 @@ const ASSETS=[
    bdg:[{t:'高所得者向け',bg:'#fdf5e6',tc:'#7a5c1e'},{t:'4〜6年で出口要',bg:'#fdf0ec',tc:'#8b4a35'}],
    mapX:4,mapY:6.5,mapR:7,mapC:'#7a5c1e',minCash:0,
    compRow:{cat:'tax',irr:'5〜8%（節税込み）',loan:4,lc:'#3d6b52',ll:'◎ LTV 70〜80%',compare:'航空機オペリース・iDeCo・小規模企業共済',pro:'節税効果最大・即効性・実物資産として残る',con:'出口設計が必須・売却時の課税戻りリスク',inv:'医師・弁護士・高所得サラリーマン'}},
-  {id:'minpaku',cat:'cashflow',name:'民泊・短期賃貸（Airbnb等）',sub:'観光エリア・都心 インバウンド対応',
+  {id:'minpaku',illiq:1,cat:'cashflow',name:'民泊・短期賃貸（Airbnb等）',sub:'観光エリア・都心 インバウンド対応',
    tagBg:'#edf5ed',tagTc:'#2d4a2d',tagLabel:'高CF（現金限定）',
    irr:'12〜20%（稼働率次第）',hor:'3〜7年',minT:1000,loan:1,lc:'#8b4a35',ll:'✕ 原則現金買い',
    compare:'FX・仮想通貨・ソーシャルレンディング',cats:['cashflow'],ents:['personal','corp','both'],
@@ -566,9 +566,9 @@ const ASSETS=[
    cons:['規制リスク（年180日上限等）','ローン原則不可・現金必須','運営負担大・稼働率変動リスク'],
    en:{personal:'民泊業登録は個人でも可。収入は雑所得または事業所得。',corp:'法人登録も可能。消費税・社会保険等の整理が必要。',both:'運営体制次第で個人・法人を選択。'},
    bdg:[{t:'現金のみ',bg:'#fdf0ec',tc:'#8b4a35'},{t:'規制リスク',bg:'#fdf0ec',tc:'#8b4a35'},{t:'高利回り',bg:'#edf5ed',tc:'#2d4a2d'}],
-   mapX:8.5,mapY:16,mapR:5,mapC:'#3d6b52',minCash:20000,
+   mapX:8.5,mapY:16,mapR:5,mapC:'#3d6b52',minCash:5000,
    compRow:{cat:'cashflow',irr:'12〜20%',loan:1,lc:'#8b4a35',ll:'✕ 原則現金買い',compare:'FX・仮想通貨・ソーシャルレンディング',pro:'高稼働で実質15〜25%・実物資産として残る',con:'規制リスク・現金必須・運営負担大',inv:'現金リッチな個人・運営型投資家'}},
-  {id:'serviced',cat:'cashflow',name:'サービスアパートメント・マンスリー',sub:'外国人駐在員・法人需要 長期滞在対応',
+  {id:'serviced',illiq:2,cat:'cashflow',name:'サービスアパートメント・マンスリー',sub:'外国人駐在員・法人需要 長期滞在対応',
    tagBg:'#edf5ed',tagTc:'#2d4a2d',tagLabel:'高CF（法人需要）',
    irr:'8〜12%',hor:'5〜10年',minT:1000,loan:2,lc:'#c4705a',ll:'△ LTV 50〜60%（事業性）',
    compare:'高配当株・インカムETF',cats:['cashflow'],ents:['personal','corp','both'],
@@ -577,7 +577,7 @@ const ASSETS=[
    cons:['長期ローンが組みにくい','稼働率・為替リスク','事業性ローンで金利高め'],
    en:{personal:'個人での事業賃貸として対応可。',corp:'法人が収益受取・経費算入の観点から自然。',both:'運営規模次第で選択。'},
    bdg:[{t:'法人需要',bg:'#edf5ed',tc:'#2d4a2d'},{t:'外資マーケット',bg:'#edf5ed',tc:'#2d4a2d'}],
-   mapX:6,mapY:10,mapR:6,mapC:'#3d6b52',minCash:20000,
+   mapX:6,mapY:10,mapR:6,mapC:'#3d6b52',minCash:5000,
    compRow:{cat:'cashflow',irr:'8〜12%',loan:2,lc:'#c4705a',ll:'△ LTV 50〜60%（事業性）',compare:'高配当株・インカムETF',pro:'法人需要で稼働安定・外資マーケット対応',con:'長期ローン困難・稼働率・為替リスク',inv:'現金リッチな個人・外資系投資家・運営型投資家'}},
 ];
 
@@ -604,6 +604,9 @@ function score(a){
   if(a.ents.includes(st.entity))s+=15;
   if(a.hors.includes(st.horizon))s+=20;
   if(a.liqs.includes(st.liq))s+=15;
+  // Asset size bonus: larger net assets → higher tolerance for illiquidity
+  const assetBonus=[0,2,4,6,8,10,12,15][st.ai]||0;
+  s+=(a.illiq||0)*assetBonus;
   return s;
 }
 
@@ -1006,7 +1009,7 @@ const HL_EN={short:'3–5 yrs',mid:'5–12 yrs',long:'12+ yrs',perm:'Permanent'}
 const ASSET_EN={
   prime:{name:'Prime Urban Residential Block',sub:'Minato / Shibuya / Meguro — RC new build',tagLabel:'Inflation Hedge × Capital',irr:'10–14%',hor:'12–15 yrs',ll:'◎ LTV 65–75%',compare:'Physical Gold + PE Fund (LBO)',pros:['Inflation hedge + leverage in one structure','Rental income + holds as real asset','Substitute for gold / PE alternatives'],cons:['Dependent on inflation continuing 12–15 yrs','IRR drops sharply on early exit','Extremely low liquidity']},
   valueadd:{name:'Value-Add (Renovation / Conversion)',sub:'Pre-code, distressed, high-vacancy assets',tagLabel:'Capital Gain',irr:'12–18%',hor:'3–7 yrs',ll:'△ LTV 50–60%',compare:'Mid-size PE Fund',pros:['High IRR potential','Create value through management','Short-term exit possible'],cons:['High execution risk / hard to finance','High equity ratio required','Hands-on involvement needed']},
-  ippan:{name:'Residential Apartment Block',sub:'Greater Tokyo suburbs / Regional cities (Sapporo, Sendai, Nagoya, Osaka, Fukuoka)',tagLabel:'Tax × Estate Planning',irr:'4–6% (suburbs) / 5–8% (regional)',hor:'10–20 yrs',ll:'◎ LTV 70–80%',compare:'J-REIT / Bonds / Life insurance',pros:['Easy financing, high equity efficiency','Depreciation + estate valuation reduction','Fully delegable to PM'],cons:['Tokyo yields almost nil','Regional exit buyers limited','Only rational for tax/estate purposes']},
+  ippan:{name:'Residential Apartment Block',sub:'Tokyo 23 wards / suburbs / Regional cities (Sapporo, Sendai, Nagoya, Osaka, Fukuoka)',tagLabel:'Tax × Estate Planning',irr:'4–6% (suburbs) / 5–8% (regional)',hor:'10–20 yrs',ll:'◎ LTV 70–80%',compare:'J-REIT / Bonds / Life insurance',pros:['Easy financing, high equity efficiency','Depreciation + estate valuation reduction','Fully delegable to PM'],cons:['Tokyo yields almost nil','Regional exit buyers limited','Only rational for tax/estate purposes']},
   kubun:{name:'Urban Condo Unit',sub:'Minato / Shibuya / Meguro — 1–3BR up to ¥200M',tagLabel:'Tax × Estate (Entry Level)',irr:'2–3% actual / 4–6% incl. tax',hor:'10–20 yrs',ll:'◎◎ LTV 80–90%',compare:'Fixed deposit / JGB',pros:['Easiest financing — small entry point','Fully passive via PM','Good entry for estate planning'],cons:['Yield alone does not justify in Tokyo','Only rational for tax/estate goals','Single-property concentration risk']},
   ultra:{name:'Ultra-Rare Premium Property',sub:'Aman Residences etc. — limited availability',tagLabel:'Scarcity Anchor',irr:'6–8% (stability focus)',hor:'Permanent / generational',ll:'△ PB credit / Lombard',compare:'Gold / Art / Collectibles',pros:['Irreplaceable scarcity — built for permanent hold','Income + stable value + estate reduction','PB credit line available for UHNW'],cons:['Ultra-high ticket / near-zero liquidity','Extremely limited buyer pool','No standard investment loan']},
   wood:{name:'Wood-frame Apartment (Depreciation Tax)',sub:'New / aged wood-frame — 22yr useful life',tagLabel:'Tax Planning',irr:'5–8% incl. tax benefit',hor:'4–6 yrs (tax period)',ll:'◎ LTV 70–80%',compare:'Aircraft leasing / iDeCo / SME mutual aid',pros:['Maximum tax benefit, immediate effect','Stays as real asset unlike leasing','Easy to finance'],cons:['Exit strategy required after depreciation','Risk of large tax bill on sale','Return depends entirely on tax benefit']},
