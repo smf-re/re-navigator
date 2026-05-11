@@ -324,7 +324,7 @@ tr:hover td{background:var(--cream)}
     <div class="hero-card">
       <div class="hero-card-title">対応アセットクラス</div>
       <div class="hero-stat"><div class="hero-stat-label">最高利回り（民泊・高稼働時）</div><div class="hero-stat-val">20%</div><div class="hero-stat-sub">期待IRR（税引後）</div></div>
-      <div class="hero-stat"><div class="hero-stat-label">カバーする投資レンジ</div><div class="hero-stat-val">1,000万〜100億円+</div><div class="hero-stat-sub">自己資金ベース</div></div>
+      <div class="hero-stat"><div class="hero-stat-label">カバーする投資レンジ</div><div class="hero-stat-val">3億円〜100億円+</div><div class="hero-stat-sub">自己資金ベース</div></div>
       <div class="hero-stat"><div class="hero-stat-label">アセットカテゴリ数</div><div class="hero-stat-val">8カテゴリ</div><div class="hero-stat-sub">目的・規模別に最適提案</div></div>
     </div>
   </div>
@@ -630,31 +630,81 @@ function showRes(){
     <span class="res-chip">保有 ${HL[st.horizon]}</span>
   </div>`;
 
-  // Build alternative suggestions (assets that miss by 1 condition)
+  // Build alternative suggestions — try relaxing each condition independently
   const matchedIds=new Set(ranked.map(a=>a.id));
-  const altSuggestions=[];
+  const altMap=new Map(); // asset.id -> best suggestion
+
   ASSETS.forEach(a=>{
     if(matchedIds.has(a.id))return;
     const t=TVALS[st.ti];
     const gm=st.goals.filter(g=>a.cats.includes(g)).length;
-    if(gm===0)return; // goal doesn't match at all - skip
-    // Check which single condition blocks it
-    if(t<a.minT){
-      altSuggestions.push({asset:a,reason:'自己資金を'+Math.ceil(a.minT/10000)+'億円以上にすると対象になります',icon:'💰'});
-    } else if(a.minCash&&t<a.minCash){
-      altSuggestions.push({asset:a,reason:'自己資金を'+Math.ceil(a.minCash/10000)+'億円以上にすると対象になります',icon:'💰'});
-    } else if(a.minAsset&&st.ai*15+50<a.minAsset){
-      altSuggestions.push({asset:a,reason:'純資産'+a.minAsset+'億円以上の方向けのアセットです',icon:'📊'});
-    } else if(!a.ents.includes(st.entity)){
-      const entLabel=st.entity==='corp'?'個人取得':'法人取得';
-      altSuggestions.push({asset:a,reason:entLabel+'に変更すると対象になります',icon:'🏢'});
-    } else if(!a.hors.includes(st.horizon)){
-      const horLabel=a.hors.includes('long')||a.hors.includes('perm')?'保有期間を長めにとると':'保有期間を短めにすると';
-      altSuggestions.push({asset:a,reason:horLabel+'対象になります',icon:'📅'});
-    } else if(!a.liqs.includes(st.liq)){
-      altSuggestions.push({asset:a,reason:'流動性の許容度を上げると対象になります',icon:'🔓'});
+    if(gm===0)return; // completely different goal — skip
+
+    // Helper: score how many conditions already match (higher = closer to matching)
+    function condScore(){
+      let s=gm*10;
+      if(a.ents.includes(st.entity))s+=4;
+      if(a.hors.includes(st.horizon))s+=4;
+      if(a.liqs.includes(st.liq))s+=3;
+      return s;
+    }
+
+    const reasons=[];
+
+    // Ticket too small
+    const effectiveMin=Math.max(a.minT, a.minCash||0);
+    if(t<effectiveMin){
+      const bil=effectiveMin>=10000?Math.ceil(effectiveMin/10000)+'億円':Math.ceil(effectiveMin/1000)+'千万円';
+      reasons.push({reason:'自己資金を'+bil+'以上にすると対象になります',icon:'💰',score:condScore()+1});
+    }
+
+    // Asset size too small
+    if(a.minAsset&&st.ai*15+50<a.minAsset){
+      reasons.push({reason:'純資産'+a.minAsset+'億円以上の方向けのアセットです',icon:'📊',score:condScore()});
+    }
+
+    // Entity mismatch — suggest switching
+    if(!a.ents.includes(st.entity)){
+      if(st.entity==='corp'&&a.ents.includes('personal')){
+        reasons.push({reason:'個人取得に変更すると対象になります（住宅ローン等活用可）',icon:'🏠',score:condScore()+3});
+      } else if(st.entity==='personal'&&a.ents.includes('corp')){
+        reasons.push({reason:'法人取得に変更すると対象になります',icon:'🏢',score:condScore()+2});
+      }
+    }
+
+    // Horizon mismatch
+    if(!a.hors.includes(st.horizon)&&(t>=effectiveMin)){
+      if((a.hors.includes('long')||a.hors.includes('perm'))&&(st.horizon==='short'||st.horizon==='mid')){
+        reasons.push({reason:'保有期間を12年以上にとると対象になります',icon:'📅',score:condScore()+2});
+      } else if((a.hors.includes('short')||a.hors.includes('mid'))&&(st.horizon==='long'||st.horizon==='perm')){
+        reasons.push({reason:'保有期間を短めに設定すると対象になります',icon:'📅',score:condScore()+2});
+      }
+    }
+
+    // Liquidity mismatch
+    if(!a.liqs.includes(st.liq)&&(t>=effectiveMin)){
+      if(st.liq==='low'&&(a.liqs.includes('mid')||a.liqs.includes('high'))){
+        reasons.push({reason:'流動性の許容度を「中程度」以上にすると対象になります',icon:'🔓',score:condScore()+1});
+      }
+    }
+
+    // Goal mismatch only (target not selected but asset is close)
+    if(reasons.length===0&&gm>0){
+      // some goals match but others block — skip, don't show
+    }
+
+    if(reasons.length>0){
+      // Pick highest scoring reason for this asset
+      reasons.sort((a,b)=>b.score-a.score);
+      const best=reasons[0];
+      if(!altMap.has(a.id)||altMap.get(a.id).score<best.score){
+        altMap.set(a.id,{asset:a,...best});
+      }
     }
   });
+
+  // Sort by score desc, take top 4
+  const altSuggestions=[...altMap.values()].sort((a,b)=>b.score-a.score).slice(0,4);
 
   if(!ranked.length){
     html+=`<div class="no-result">
