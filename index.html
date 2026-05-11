@@ -268,6 +268,7 @@ tr:hover td{background:var(--cream)}
 .no-result-title{font-family:'Noto Serif JP',serif;font-size:18px;font-weight:500;margin-bottom:8px}
 .no-result-sub{font-size:13px;color:var(--stone2);font-weight:300;line-height:1.7;margin-bottom:24px}
 
+#lang-btn:hover{border-color:rgba(255,255,255,.6)!important;color:#fff!important}
 /* CONSULT CTA */
 .consult-cta{margin-top:32px;background:var(--stone);border-radius:var(--radius-lg);padding:28px 32px}
 .consult-cta-inner{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
@@ -304,28 +305,31 @@ tr:hover td{background:var(--cream)}
   <div class="logo">
     <div class="logo-text" style="font-family:'Jost',sans-serif;font-size:16px;font-weight:500;letter-spacing:.12em;color:#fff">REAL ESTATE NAVIGATOR</div>
   </div>
-  <div class="header-badge" style="font-family:'Jost',sans-serif">SMF</div>
+  <div style="display:flex;align-items:center;gap:16px">
+    <button id="lang-btn" onclick="toggleLang()" style="font-family:'Jost',sans-serif;font-size:11px;font-weight:500;letter-spacing:.1em;padding:5px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.25);background:transparent;color:rgba(255,255,255,.7);cursor:pointer;transition:all .2s">EN</button>
+    <div class="header-badge" style="font-family:'Jost',sans-serif">SMF</div>
+  </div>
 </header>
 
 <nav class="nav">
-  <button class="nav-btn active" onclick="showSection('advisor',this)">アセット提案</button>
-  <button class="nav-btn" onclick="showSection('map',this)">リスク・リターンマップ</button>
-  <button class="nav-btn" onclick="showSection('comp',this)">金融商品比較</button>
+  <button class="nav-btn active" onclick="showSection('advisor',this)" data-ja="アセット提案" data-en="Asset Proposal">アセット提案</button>
+  <button class="nav-btn" onclick="showSection('map',this)" data-ja="リスク・リターンマップ" data-en="Risk / Return Map">リスク・リターンマップ</button>
+  <button class="nav-btn" onclick="showSection('comp',this)" data-ja="金融商品比較" data-en="Comparison">金融商品比較</button>
 </nav>
 
 <!-- ADVISOR -->
 <div id="section-advisor" class="section active">
   <div class="hero">
     <div>
-      <div class="hero-eyebrow">Asset Allocation Advisor</div>
-      <h1 class="hero-title">あなたに最適な<br>不動産投資を<em>提案します</em></h1>
-      <p class="hero-body">保有資産規模・投資目的・購入主体・自己資金・保有期間を入力すると、最適なアセットクラスを複数提案し、リスク・リターンマップ上での位置付けをお示しします。</p>
+      <div class="hero-eyebrow" data-ja="Asset Allocation Advisor" data-en="Asset Allocation Advisor">Asset Allocation Advisor</div>
+      <h1 class="hero-title" data-ja="あなたに最適な<br>不動産投資を<em>提案します</em>" data-en="We propose the<br>optimal <em>real estate investment</em> for you">あなたに最適な<br>不動産投資を<em>提案します</em></h1>
+      <p class="hero-body" data-ja="保有資産規模・投資目的・購入主体・自己資金・保有期間を入力すると、最適なアセットクラスを複数提案し、リスク・リターンマップ上での位置付けをお示しします。" data-en="Enter your asset size, investment goal, entity type, equity, and holding period — and we'll suggest the best real estate asset classes with a risk/return map.">保有資産規模・投資目的・購入主体・自己資金・保有期間を入力すると、最適なアセットクラスを複数提案し、リスク・リターンマップ上での位置付けをお示しします。</p>
     </div>
     <div class="hero-card">
-      <div class="hero-card-title">対応アセットクラス</div>
-      <div class="hero-stat"><div class="hero-stat-label">最高利回り（民泊・高稼働時）</div><div class="hero-stat-val">20%</div><div class="hero-stat-sub">期待IRR（税引後）</div></div>
-      <div class="hero-stat"><div class="hero-stat-label">カバーする投資レンジ</div><div class="hero-stat-val">3億円〜100億円+</div><div class="hero-stat-sub">自己資金ベース</div></div>
-      <div class="hero-stat"><div class="hero-stat-label">アセットカテゴリ数</div><div class="hero-stat-val">8カテゴリ</div><div class="hero-stat-sub">目的・規模別に最適提案</div></div>
+      <div class="hero-card-title" data-ja="対応アセットクラス" data-en="Asset Classes Covered">対応アセットクラス</div>
+      <div class="hero-stat"><div class="hero-stat-label" data-ja="最高利回り（民泊・高稼働時）" data-en="Max Yield (Short-term rental, high occupancy)">最高利回り（民泊・高稼働時）</div><div class="hero-stat-val">20%</div><div class="hero-stat-sub" data-ja="期待IRR（税引後）" data-en="Expected IRR (after tax)">期待IRR（税引後）</div></div>
+      <div class="hero-stat"><div class="hero-stat-label" data-ja="カバーする投資レンジ" data-en="Investment Range Covered">カバーする投資レンジ</div><div class="hero-stat-val">3億円〜100億円+</div><div class="hero-stat-sub" data-ja="自己資金ベース" data-en="Equity basis">自己資金ベース</div></div>
+      <div class="hero-stat"><div class="hero-stat-label" data-ja="アセットカテゴリ数" data-en="Asset Categories">アセットカテゴリ数</div><div class="hero-stat-val">8カテゴリ</div><div class="hero-stat-sub" data-ja="目的・規模別に最適提案" data-en="Tailored by goal and scale">目的・規模別に最適提案</div></div>
     </div>
   </div>
 
@@ -333,84 +337,84 @@ tr:hover td{background:var(--cream)}
     <div class="prog-wrap">
       <div class="prog-steps" id="prog-steps">
         <div class="prog-step"><div class="prog-dot act" id="pd0">1</div><div class="prog-step-label act" id="pl0">保有資産</div></div>
-        <div class="prog-step"><div class="prog-dot" id="pd1">2</div><div class="prog-step-label" id="pl1">目的</div></div>
-        <div class="prog-step"><div class="prog-dot" id="pd2">3</div><div class="prog-step-label" id="pl2">主体・資金</div></div>
-        <div class="prog-step"><div class="prog-dot" id="pd3">4</div><div class="prog-step-label" id="pl3">保有期間</div></div>
+        <div class="prog-step"><div class="prog-dot" id="pd1">2</div><div class="prog-step-label" id="pl1" data-ja="目的" data-en="Goal">目的</div></div>
+        <div class="prog-step"><div class="prog-dot" id="pd2">3</div><div class="prog-step-label" id="pl2" data-ja="主体・資金" data-en="Entity">主体・資金</div></div>
+        <div class="prog-step"><div class="prog-dot" id="pd3">4</div><div class="prog-step-label" id="pl3" data-ja="保有期間" data-en="Horizon">保有期間</div></div>
       </div>
     </div>
 
     <div class="step-wrap active" id="sw0">
-      <div class="step-eyebrow">Step 1 / 4</div>
-      <h2 class="step-title">保有資産の規模</h2>
-      <p class="step-sub">不動産以外も含めた純資産の目安を教えてください（5億円以上）</p>
+      <div class="step-eyebrow" data-ja="Step 1 / 4" data-en="Step 1 / 4">Step 1 / 4</div>
+      <h2 class="step-title" data-ja="保有資産の規模" data-en="Asset Size">保有資産の規模</h2>
+      <p class="step-sub" data-ja="不動産以外も含めた純資産の目安を教えてください（5億円以上）" data-en="Please enter your approximate net assets including non-real estate (¥500M+)">不動産以外も含めた純資産の目安を教えてください（5億円以上）</p>
       <div class="slider-display">
         <div class="slider-val" id="av">5億円</div>
-        <div class="slider-hint">スライダーで調整してください</div>
+        <div class="slider-hint" data-ja="スライダーで調整してください" data-en="Adjust with the slider">スライダーで調整してください</div>
       </div>
       <input type="range" id="asl" min="0" max="7" value="0" step="1">
-      <div class="slider-range"><span>5億円</span><span>100億円〜</span></div>
-      <div class="nav-btns"><button class="btn-primary" onclick="go(1)">次へ →</button></div>
+      <div class="slider-range"><span data-ja="5億円" data-en="¥500M">5億円</span><span data-ja="100億円〜" data-en="¥10B+">100億円〜</span></div>
+      <div class="nav-btns"><button class="btn-primary" onclick="go(1)" data-ja="次へ →" data-en="Next →">次へ →</button></div>
     </div>
 
     <div class="step-wrap" id="sw1">
-      <div class="step-eyebrow">Step 2 / 4</div>
-      <h2 class="step-title">不動産投資の目的</h2>
-      <p class="step-sub">最も近いものを選んでください（複数可）</p>
+      <div class="step-eyebrow" data-ja="Step 2 / 4" data-en="Step 2 / 4">Step 2 / 4</div>
+      <h2 class="step-title" data-ja="不動産投資の目的" data-en="Investment Goal">不動産投資の目的</h2>
+      <p class="step-sub" data-ja="最も近いものを選んでください（複数可）" data-en="Select all that apply (multiple OK)">最も近いものを選んでください（複数可）</p>
       <div class="chip-grid" id="gc">
-        <div class="chip msel" data-v="capital" onclick="tog(this,'g')">キャピタルゲイン<small>売却益・資産成長</small></div>
-        <div class="chip msel" data-v="hedge" onclick="tog(this,'g')">インフレヘッジ<small>実物資産・円リスク回避</small></div>
-        <div class="chip msel" data-v="tax" onclick="tog(this,'g')">節税・相続対策<small>所得圧縮・評価圧縮</small></div>
-        <div class="chip msel" data-v="cashflow" onclick="tog(this,'g')">高CF（現金重視）<small>民泊・短期賃貸等</small></div>
+        <div class="chip msel" data-v="capital" onclick="tog(this,'g')" data-ja="キャピタルゲイン" data-en="Capital Gain" data-sja="売却益・資産成長" data-sen="Capital appreciation">キャピタルゲイン<small>売却益・資産成長</small></div>
+        <div class="chip msel" data-v="hedge" onclick="tog(this,'g')" data-ja="インフレヘッジ" data-en="Inflation Hedge" data-sja="実物資産・円リスク回避" data-sen="Hard asset / JPY hedge">インフレヘッジ<small>実物資産・円リスク回避</small></div>
+        <div class="chip msel" data-v="tax" onclick="tog(this,'g')" data-ja="節税・相続対策" data-en="Tax & Estate" data-sja="所得圧縮・評価圧縮" data-sen="Tax reduction / estate planning">節税・相続対策<small>所得圧縮・評価圧縮</small></div>
+        <div class="chip msel" data-v="cashflow" onclick="tog(this,'g')" data-ja="高CF（現金重視）" data-en="High Cash Flow" data-sja="民泊・短期賃貸等" data-sen="Short-term rental / high yield">高CF（現金重視）<small>民泊・短期賃貸等</small></div>
       </div>
       <div class="nav-btns">
-        <button class="btn-back" onclick="go(0)">← 戻る</button>
-        <button class="btn-primary" id="b1" disabled onclick="go(2)">次へ →</button>
+        <button class="btn-back" onclick="go(0)" data-ja="← 戻る" data-en="← Back">← 戻る</button>
+        <button class="btn-primary" id="b1" disabled onclick="go(2)" data-ja="次へ →" data-en="Next →">次へ →</button>
       </div>
     </div>
 
     <div class="step-wrap" id="sw2">
-      <div class="step-eyebrow">Step 3 / 4</div>
-      <h2 class="step-title">購入主体と自己資金</h2>
-      <p class="step-sub">取得主体と1件あたりの投入可能額を教えてください</p>
-      <div class="field-label" style="margin-top:0">購入主体</div>
+      <div class="step-eyebrow" data-ja="Step 3 / 4" data-en="Step 3 / 4">Step 3 / 4</div>
+      <h2 class="step-title" data-ja="購入主体と自己資金" data-en="Entity & Equity">購入主体と自己資金</h2>
+      <p class="step-sub" data-ja="取得主体と1件あたりの投入可能額を教えてください" data-en="Select your entity type and available equity per property">取得主体と1件あたりの投入可能額を教えてください</p>
+      <div class="field-label" style="margin-top:0" data-ja="購入主体" data-en="Entity Type">購入主体</div>
       <div class="chip-grid" id="ec">
-        <div class="chip" data-v="personal" onclick="sel(this,'e')">個人<small>譲渡所得・相続に直結</small></div>
-        <div class="chip" data-v="corp" onclick="sel(this,'e')">法人<small>損金算入・法人税適用</small></div>
-        <div class="chip" data-v="both" onclick="sel(this,'e')">未定・相談したい<small>ケース次第で判断</small></div>
+        <div class="chip" data-v="personal" onclick="sel(this,'e')" data-ja="個人" data-en="Individual" data-sja="譲渡所得・相続に直結" data-sen="Capital gains / estate direct">個人<small>譲渡所得・相続に直結</small></div>
+        <div class="chip" data-v="corp" onclick="sel(this,'e')" data-ja="法人" data-en="Corporate" data-sja="損金算入・法人税適用" data-sen="Deductible expenses / corp tax">法人<small>損金算入・法人税適用</small></div>
+        <div class="chip" data-v="both" onclick="sel(this,'e')" data-ja="未定・相談したい" data-en="Undecided" data-sja="ケース次第で判断" data-sen="Depends on the case">未定・相談したい<small>ケース次第で判断</small></div>
       </div>
-      <div class="field-label">1件あたりの自己資金（目安）</div>
+      <div class="field-label" data-ja="1件あたりの自己資金（目安）" data-en="Equity per property (approx.)">1件あたりの自己資金（目安）</div>
       <div class="slider-display">
         <div class="slider-val" id="tv">5,000万円</div>
-        <div class="slider-hint">スライダーで調整してください</div>
+        <div class="slider-hint" data-ja="スライダーで調整してください" data-en="Adjust with the slider">スライダーで調整してください</div>
       </div>
       <input type="range" id="tsl" min="0" max="8" value="3" step="1">
-      <div class="slider-range"><span>〜1,000万</span><span>5億〜</span></div>
+      <div class="slider-range"><span data-ja="〜1,000万" data-en="〜¥10M">〜1,000万</span><span data-ja="5億〜" data-en="¥500M+">5億〜</span></div>
       <div class="nav-btns">
-        <button class="btn-back" onclick="go(1)">← 戻る</button>
-        <button class="btn-primary" id="b2" disabled onclick="go(3)">次へ →</button>
+        <button class="btn-back" onclick="go(1)" data-ja="← 戻る" data-en="← Back">← 戻る</button>
+        <button class="btn-primary" id="b2" disabled onclick="go(3)" data-ja="次へ →" data-en="Next →">次へ →</button>
       </div>
     </div>
 
     <div class="step-wrap" id="sw3">
-      <div class="step-eyebrow">Step 4 / 4</div>
-      <h2 class="step-title">保有期間・流動性</h2>
-      <p class="step-sub">想定する保有期間と流動性リスクへの許容度を教えてください</p>
-      <div class="field-label" style="margin-top:0">想定保有期間</div>
+      <div class="step-eyebrow" data-ja="Step 4 / 4" data-en="Step 4 / 4">Step 4 / 4</div>
+      <h2 class="step-title" data-ja="保有期間・流動性" data-en="Holding Period & Liquidity">保有期間・流動性</h2>
+      <p class="step-sub" data-ja="想定する保有期間と流動性リスクへの許容度を教えてください" data-en="Select your expected holding period and liquidity tolerance">想定する保有期間と流動性リスクへの許容度を教えてください</p>
+      <div class="field-label" style="margin-top:0" data-ja="想定保有期間" data-en="Expected Holding Period">想定保有期間</div>
       <div class="chip-grid" id="hc">
-        <div class="chip" data-v="short" onclick="sel(this,'h')">3〜5年</div>
-        <div class="chip" data-v="mid" onclick="sel(this,'h')">5〜12年</div>
-        <div class="chip" data-v="long" onclick="sel(this,'h')">12年以上</div>
-        <div class="chip" data-v="perm" onclick="sel(this,'h')">永続保有</div>
+        <div class="chip" data-v="short" onclick="sel(this,'h')" data-ja="3〜5年" data-en="3–5 yrs">3〜5年</div>
+        <div class="chip" data-v="mid" onclick="sel(this,'h')" data-ja="5〜12年" data-en="5–12 yrs">5〜12年</div>
+        <div class="chip" data-v="long" onclick="sel(this,'h')" data-ja="12年以上" data-en="12+ yrs">12年以上</div>
+        <div class="chip" data-v="perm" onclick="sel(this,'h')" data-ja="永続保有" data-en="Permanent">永続保有</div>
       </div>
-      <div class="field-label">流動性リスクへの許容度</div>
+      <div class="field-label" data-ja="流動性リスクへの許容度" data-en="Liquidity Risk Tolerance">流動性リスクへの許容度</div>
       <div class="chip-grid" id="lc">
-        <div class="chip" data-v="low" onclick="sel(this,'l')">低い<small>すぐ売れないと困る</small></div>
-        <div class="chip" data-v="mid" onclick="sel(this,'l')">中程度<small>数年は許容</small></div>
-        <div class="chip" data-v="high" onclick="sel(this,'l')">高い<small>10年以上ロックOK</small></div>
+        <div class="chip" data-v="low" onclick="sel(this,'l')" data-ja="低い" data-en="Low" data-sja="すぐ売れないと困る" data-sen="Need quick liquidity">低い<small>すぐ売れないと困る</small></div>
+        <div class="chip" data-v="mid" onclick="sel(this,'l')" data-ja="中程度" data-en="Moderate" data-sja="数年は許容" data-sen="Can wait a few years">中程度<small>数年は許容</small></div>
+        <div class="chip" data-v="high" onclick="sel(this,'l')" data-ja="高い" data-en="High" data-sja="10年以上ロックOK" data-sen="OK with 10+ yr lock">高い<small>10年以上ロックOK</small></div>
       </div>
       <div class="nav-btns">
-        <button class="btn-back" onclick="go(2)">← 戻る</button>
-        <button class="btn-primary" id="b3" disabled onclick="showRes()">提案を見る →</button>
+        <button class="btn-back" onclick="go(2)" data-ja="← 戻る" data-en="← Back">← 戻る</button>
+        <button class="btn-primary" id="b3" disabled onclick="showRes()" data-ja="提案を見る →" data-en="View Proposal →">提案を見る →</button>
       </div>
     </div>
 
@@ -422,18 +426,18 @@ tr:hover td{background:var(--cream)}
 <div id="section-map" class="section">
   <div class="section-hero">
     <div class="section-hero-inner">
-      <div class="section-eyebrow">Risk / Return Map</div>
-      <h2 class="section-hero-title">日本不動産 — アセットクラス総覧</h2>
-      <p class="section-hero-sub">リスク・リターン・投資家層を横断整理。バブルサイズ = 最低投資額の目安</p>
+      <div class="section-eyebrow" data-ja="Risk / Return Map" data-en="Risk / Return Map">Risk / Return Map</div>
+      <h2 class="section-hero-title" data-ja="日本不動産 — アセットクラス総覧" data-en="Japan Real Estate — Asset Class Overview">日本不動産 — アセットクラス総覧</h2>
+      <p class="section-hero-sub" data-ja="リスク・リターン・投資家層を横断整理。バブルサイズ = 最低投資額の目安" data-en="Risk, return, and investor profiles. Bubble size = minimum investment.">リスク・リターン・投資家層を横断整理。バブルサイズ = 最低投資額の目安</p>
     </div>
   </div>
   <div class="map-container">
     <div class="legend-row">
-      <span class="leg"><span class="leg-dot" style="background:#8b4a35"></span>ヘッジ・希少性型</span>
-      <span class="leg"><span class="leg-dot" style="background:#2d4a6b"></span>キャピタル型</span>
-      <span class="leg"><span class="leg-dot" style="background:#7a5c1e"></span>節税型</span>
-      <span class="leg"><span class="leg-dot" style="background:#3d6b52"></span>高CF型</span>
-      <span class="leg"><span class="leg-dot" style="background:#9a8c82"></span>金融商品（参照線）</span>
+      <span class="leg"><span class="leg-dot" style="background:#8b4a35"></span><span data-ja="ヘッジ・希少性型" data-en="Hedge / Rare Assets">ヘッジ・希少性型</span></span>
+      <span class="leg"><span class="leg-dot" style="background:#2d4a6b"></span><span data-ja="キャピタル型" data-en="Capital Growth">キャピタル型</span></span>
+      <span class="leg"><span class="leg-dot" style="background:#7a5c1e"></span><span data-ja="節税型" data-en="Tax Planning">節税型</span></span>
+      <span class="leg"><span class="leg-dot" style="background:#3d6b52"></span><span data-ja="高CF型" data-en="High Cash Flow">高CF型</span></span>
+      <span class="leg"><span class="leg-dot" style="background:#9a8c82"></span><span data-ja="金融商品（参照線）" data-en="Financial Products (reference)">金融商品（参照線）</span></span>
     </div>
     <div class="chart-wrap"><canvas id="bc" role="img" aria-label="不動産カテゴリと金融商品のリスク・リターンバブルチャート"></canvas></div>
     <p class="chart-note">横軸 = リスク水準（流動性・変動性）　縦軸 = 期待IRR（税引後）　バブルサイズ = 最低投資額の目安　※SMF推計値</p>
@@ -444,29 +448,29 @@ tr:hover td{background:var(--cream)}
 <div id="section-comp" class="section">
   <div class="section-hero">
     <div class="section-hero-inner">
-      <div class="section-eyebrow">Comparison</div>
-      <h2 class="section-hero-title">不動産カテゴリ × 金融商品比較</h2>
-      <p class="section-hero-sub">融資つきやすさ・比較金融商品・優劣を横断整理</p>
+      <div class="section-eyebrow" data-ja="Comparison" data-en="Comparison">Comparison</div>
+      <h2 class="section-hero-title" data-ja="不動産カテゴリ × 金融商品比較" data-en="Real Estate Categories × Financial Product Comparison">不動産カテゴリ × 金融商品比較</h2>
+      <p class="section-hero-sub" data-ja="融資つきやすさ・比較金融商品・優劣を横断整理" data-en="Financing ease, comparable financial products, pros and cons.">融資つきやすさ・比較金融商品・優劣を横断整理</p>
     </div>
   </div>
   <div class="comp-container">
     <div class="filter-strip">
-      <button class="filt on" onclick="filt('all',this)">すべて</button>
-      <button class="filt" onclick="filt('capital',this)">キャピタル</button>
-      <button class="filt" onclick="filt('hedge',this)">ヘッジ</button>
-      <button class="filt" onclick="filt('tax',this)">節税</button>
-      <button class="filt" onclick="filt('cashflow',this)">高CF</button>
+      <button class="filt on" onclick="filt('all',this)" data-ja="すべて" data-en="All">すべて</button>
+      <button class="filt" onclick="filt('capital',this)" data-ja="キャピタル" data-en="Capital">キャピタル</button>
+      <button class="filt" onclick="filt('hedge',this)" data-ja="ヘッジ" data-en="Hedge">ヘッジ</button>
+      <button class="filt" onclick="filt('tax',this)" data-ja="節税" data-en="Tax">節税</button>
+      <button class="filt" onclick="filt('cashflow',this)" data-ja="高CF" data-en="High CF">高CF</button>
     </div>
     <div class="tbl-scroll">
       <table>
         <thead><tr>
-          <th style="min-width:155px">不動産カテゴリ</th>
-          <th style="min-width:85px">期待IRR</th>
-          <th style="min-width:165px">融資つきやすさ</th>
-          <th style="min-width:155px">比較される金融商品</th>
-          <th style="min-width:140px">不動産の優位点</th>
-          <th style="min-width:140px">不動産の劣位点</th>
-          <th style="min-width:115px">主な投資家層</th>
+          <th style="min-width:155px" data-ja="不動産カテゴリ" data-en="Asset Category">不動産カテゴリ</th>
+          <th style="min-width:85px" data-ja="期待IRR" data-en="Expected IRR">期待IRR</th>
+          <th style="min-width:165px" data-ja="融資つきやすさ" data-en="Financing Ease">融資つきやすさ</th>
+          <th style="min-width:155px" data-ja="比較される金融商品" data-en="Comparable Products">比較される金融商品</th>
+          <th style="min-width:140px" data-ja="不動産の優位点" data-en="RE Advantages">不動産の優位点</th>
+          <th style="min-width:140px" data-ja="不動産の劣位点" data-en="RE Disadvantages">不動産の劣位点</th>
+          <th style="min-width:115px" data-ja="主な投資家層" data-en="Investor Profile">主な投資家層</th>
         </tr></thead>
         <tbody id="ctbody"></tbody>
       </table>
@@ -476,7 +480,7 @@ tr:hover td{background:var(--cream)}
 
 <footer class="site-footer">
   <div class="footer-logo">SMF株式会社</div>
-  <p class="footer-note">東京都港区赤坂1-3-5 アビタシオン赤坂8F　宅建業免許 東京都知事(1)第110042号<br>本ツールの情報は参考目的であり、投資助言ではありません。最終的な投資判断はご自身の責任において行ってください。</p>
+  <p class="footer-note" data-ja="東京都港区赤坂1-3-5 アビタシオン赤坂8F　宅建業免許 東京都知事(1)第110042号<br>本ツールの情報は参考目的であり、投資助言ではありません。最終的な投資判断はご自身の責任において行ってください。" data-en="Avitation Akasaka 8F, 1-3-5 Akasaka, Minato-ku, Tokyo. Real Estate License: Tokyo Governor (1) No.110042<br>This tool is for informational purposes only and does not constitute investment advice. Please make final investment decisions at your own discretion.">東京都港区赤坂1-3-5 アビタシオン赤坂8F　宅建業免許 東京都知事(1)第110042号<br>本ツールの情報は参考目的であり、投資助言ではありません。最終的な投資判断はご自身の責任において行ってください。</p>
 </footer>
 
 <script>
@@ -717,7 +721,7 @@ function showRes(){
         <div class="res-section-label">条件を少し広げると、こんなアセットがあります</div>
         <div class="alt-grid">`;
       altSuggestions.slice(0,4).forEach(({asset:a,reason,icon})=>{
-        html+=`<div class="alt-card">
+        html+=`<div class="alt-card" data-asset-id="${a.id}">
           <div class="alt-reason">${icon} ${reason}</div>
           <div class="alt-name">${a.name}</div>
           <div class="alt-sub">${a.sub}</div>
@@ -733,7 +737,7 @@ function showRes(){
     html+=`<div class="res-section-label">提案アセット（マッチ度順）</div><div class="res-grid">`;
     show.forEach((a,i)=>{
       const en=a.en[st.entity]||a.en['both']||'';
-      html+=`<div class="res-card${i===0?' top':''}">
+      html+=`<div class="res-card${i===0?' top':''}" data-asset-id="${a.id}">
         <div class="res-rank${i===0?' top':''}">${i===0?'★ 最もマッチ':'第'+(i+1)+'候補'}</div>
         <span class="res-tag" style="background:${a.tagBg};color:${a.tagTc}">${a.tagLabel}</span>
         <div class="res-name">${a.name}</div>
@@ -770,7 +774,7 @@ function showRes(){
         <div class="res-section-label">条件を少し広げると、他にもあります</div>
         <div class="alt-grid">`;
       altSuggestions.slice(0,3).forEach(({asset:a,reason,icon})=>{
-        html+=`<div class="alt-card">
+        html+=`<div class="alt-card" data-asset-id="${a.id}">
           <div class="alt-reason">${icon} ${reason}</div>
           <div class="alt-name">${a.name}</div>
           <div class="alt-sub">${a.sub}</div>
@@ -783,7 +787,7 @@ function showRes(){
     }
     html+=`<div class="consult-cta"><div class="consult-cta-inner"><div class="consult-cta-text"><div class="consult-cta-title">SMFに相談する</div><div class="consult-cta-sub">提案内容をもとに、担当者からご連絡いたします</div></div><button class="consult-btn" onclick="openModal()">無料相談を申し込む →</button></div></div>`;
   }
-  html+=`<button class="restart-btn" onclick="restart()">← 最初からやり直す</button>`;
+  html+=`<button class="restart-btn" onclick="restart()" data-ja="← 最初からやり直す" data-en="← Start Over">← 最初からやり直す</button>`;
   document.getElementById('rc').innerHTML=html;
   document.querySelectorAll('.step-wrap').forEach(s=>s.classList.remove('active'));
   document.getElementById('swres').classList.add('active');
@@ -793,6 +797,7 @@ function showRes(){
     if(lbl)lbl.classList.remove('act');
   }
   if(ranked.length>0)setTimeout(()=>drawResChart(ranked),80);
+  setTimeout(()=>{if(LANG==="en")applyResLang();},120);
 }
 
 function drawResChart(ranked){
