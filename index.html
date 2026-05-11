@@ -250,6 +250,24 @@ tr:hover td{background:var(--cream)}
   .nav-btn{padding:13px 12px;font-size:12px}
 }
 
+
+/* ALTERNATIVE SUGGESTIONS */
+.alt-section{margin-top:28px;padding-top:24px;border-top:1px solid var(--cream3)}
+.alt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-top:0}
+.alt-card{border-radius:var(--radius-lg);padding:18px;border:1px dashed var(--cream3);background:var(--cream);transition:all .2s}
+.alt-card:hover{background:#fff;border-color:var(--cream4);box-shadow:var(--shadow-sm)}
+.alt-reason{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;color:var(--amber);background:var(--amber-bg);border-radius:20px;padding:3px 10px;margin-bottom:8px}
+.alt-name{font-family:'Noto Serif JP',serif;font-size:14px;font-weight:500;margin-bottom:3px;color:var(--stone)}
+.alt-sub{font-size:11px;color:var(--stone3);margin-bottom:10px;font-weight:300}
+.alt-mrow{display:flex;justify-content:space-between;font-size:11px;color:var(--stone2);padding:3px 0;border-bottom:1px solid var(--cream3)}
+.alt-mrow:last-of-type{border:none}
+.alt-mv{font-weight:500;color:var(--stone);font-size:11px}
+/* No result */
+.no-result{background:#fff;border-radius:var(--radius-lg);padding:32px;text-align:center;border:1px solid var(--cream3)}
+.no-result-icon{font-size:36px;margin-bottom:12px}
+.no-result-title{font-family:'Noto Serif JP',serif;font-size:18px;font-weight:500;margin-bottom:8px}
+.no-result-sub{font-size:13px;color:var(--stone2);font-weight:300;line-height:1.7;margin-bottom:24px}
+
 /* CONSULT CTA */
 .consult-cta{margin-top:32px;background:var(--stone);border-radius:var(--radius-lg);padding:28px 32px}
 .consult-cta-inner{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
@@ -515,7 +533,7 @@ const ASSETS=[
    compRow:{cat:'tax',irr:'実質2〜3%（節税込み4〜6%）',loan:5,lc:'#3d6b52',ll:'◎◎ LTV 80〜90%',compare:'定期預金・個人向け国債',pro:'最も融資が出やすい・小口・完全パッシブ・相続評価圧縮',con:'純粋インカムとして成立しない・節税目的前提',inv:'会社員・個人投資家・相続対策入門層'}},
   {id:'ultra',cat:'hedge',name:'超希少性プレミアム物件',sub:'アマンレジデンス等 限定物件',
    tagBg:'#fdf0ec',tagTc:'#8b4a35',tagLabel:'希少性アンカー',
-   irr:'6〜8%（評価安定重視）',hor:'永続〜次世代',minT:100000,loan:2,lc:'#c4705a',ll:'△ PB与信・ロンバード',
+   irr:'6〜8%（評価安定重視）',hor:'永続〜次世代',minT:30000,loan:2,lc:'#c4705a',ll:'△ PB与信・ロンバード',
    compare:'ゴールド・美術品・コレクタブル',cats:['hedge'],ents:['personal','corp','both'],
    hors:['perm'],liqs:['high'],
    pros:['再現不可能な希少性・永続保有に耐える','インカム+評価安定+相続圧縮の三拍子','資産家層はPB与信枠で対応可'],
@@ -612,8 +630,54 @@ function showRes(){
     <span class="res-chip">保有 ${HL[st.horizon]}</span>
   </div>`;
 
+  // Build alternative suggestions (assets that miss by 1 condition)
+  const matchedIds=new Set(ranked.map(a=>a.id));
+  const altSuggestions=[];
+  ASSETS.forEach(a=>{
+    if(matchedIds.has(a.id))return;
+    const t=TVALS[st.ti];
+    const gm=st.goals.filter(g=>a.cats.includes(g)).length;
+    if(gm===0)return; // goal doesn't match at all - skip
+    // Check which single condition blocks it
+    if(t<a.minT){
+      altSuggestions.push({asset:a,reason:'自己資金を'+Math.ceil(a.minT/10000)+'億円以上にすると対象になります',icon:'💰'});
+    } else if(a.minCash&&t<a.minCash){
+      altSuggestions.push({asset:a,reason:'自己資金を'+Math.ceil(a.minCash/10000)+'億円以上にすると対象になります',icon:'💰'});
+    } else if(a.minAsset&&st.ai*15+50<a.minAsset){
+      altSuggestions.push({asset:a,reason:'純資産'+a.minAsset+'億円以上の方向けのアセットです',icon:'📊'});
+    } else if(!a.ents.includes(st.entity)){
+      const entLabel=st.entity==='corp'?'個人取得':'法人取得';
+      altSuggestions.push({asset:a,reason:entLabel+'に変更すると対象になります',icon:'🏢'});
+    } else if(!a.hors.includes(st.horizon)){
+      const horLabel=a.hors.includes('long')||a.hors.includes('perm')?'保有期間を長めにとると':'保有期間を短めにすると';
+      altSuggestions.push({asset:a,reason:horLabel+'対象になります',icon:'📅'});
+    } else if(!a.liqs.includes(st.liq)){
+      altSuggestions.push({asset:a,reason:'流動性の許容度を上げると対象になります',icon:'🔓'});
+    }
+  });
+
   if(!ranked.length){
-    html+=`<div class="warn-box">条件に合うアセットが見つかりませんでした。自己資金・目的・保有期間の組み合わせを見直してください。</div>`;
+    html+=`<div class="no-result">
+      <div class="no-result-icon">🔍</div>
+      <div class="no-result-title">現在の条件では該当なし</div>
+      <p class="no-result-sub">入力された条件の組み合わせでは提案できるアセットがありませんでした。<br>下記の「条件を少し広げると…」をご参考ください。</p>
+    </div>`;
+    if(altSuggestions.length>0){
+      html+=`<div class="alt-section">
+        <div class="res-section-label">条件を少し広げると、こんなアセットがあります</div>
+        <div class="alt-grid">`;
+      altSuggestions.slice(0,4).forEach(({asset:a,reason,icon})=>{
+        html+=`<div class="alt-card">
+          <div class="alt-reason">${icon} ${reason}</div>
+          <div class="alt-name">${a.name}</div>
+          <div class="alt-sub">${a.sub}</div>
+          <div class="alt-mrow"><span>期待IRR</span><span class="alt-mv">${a.irr}</span></div>
+          <div class="alt-mrow"><span>推奨保有期間</span><span class="alt-mv">${a.hor}</span></div>
+          <div class="alt-mrow" style="border:none"><span>融資</span><span class="alt-mv">${a.ll}</span></div>
+        </div>`;
+      });
+      html+=`</div></div>`;
+    }
   } else {
     const show=ranked.slice(0,Math.min(ranked.length,4));
     html+=`<div class="res-section-label">提案アセット（マッチ度順）</div><div class="res-grid">`;
@@ -650,6 +714,23 @@ function showRes(){
     const assetNames=show.map((a,i)=>(i===0?'★ '+a.name:a.name)).join('、');
     const summaryText='純資産: '+ALABELS[st.ai]+' ／ 自己資金: '+TLABELS[st.ti]+' ／ 目的: '+st.goals.map(g=>GL[g]).join('・')+' ／ 購入主体: '+EL[st.entity]+' ／ 保有期間: '+HL[st.horizon]+' ／ 提案アセット: '+assetNames;
     window._lastSummary=summaryText;
+    // Add alt suggestions if there are any unmatched assets
+    if(altSuggestions.length>0){
+      html+=`<div class="alt-section">
+        <div class="res-section-label">条件を少し広げると、他にもあります</div>
+        <div class="alt-grid">`;
+      altSuggestions.slice(0,3).forEach(({asset:a,reason,icon})=>{
+        html+=`<div class="alt-card">
+          <div class="alt-reason">${icon} ${reason}</div>
+          <div class="alt-name">${a.name}</div>
+          <div class="alt-sub">${a.sub}</div>
+          <div class="alt-mrow"><span>期待IRR</span><span class="alt-mv">${a.irr}</span></div>
+          <div class="alt-mrow"><span>推奨保有期間</span><span class="alt-mv">${a.hor}</span></div>
+          <div class="alt-mrow" style="border:none"><span>融資</span><span class="alt-mv">${a.ll}</span></div>
+        </div>`;
+      });
+      html+=`</div></div>`;
+    }
     html+=`<div class="consult-cta"><div class="consult-cta-inner"><div class="consult-cta-text"><div class="consult-cta-title">SMFに相談する</div><div class="consult-cta-sub">提案内容をもとに、担当者からご連絡いたします</div></div><button class="consult-btn" onclick="openModal()">無料相談を申し込む →</button></div></div>`;
   }
   html+=`<button class="restart-btn" onclick="restart()">← 最初からやり直す</button>`;
