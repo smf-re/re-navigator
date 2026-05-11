@@ -852,8 +852,7 @@ function sel(el,g){
   const b=document.getElementById('b3');if(b)b.disabled=!(st.horizon&&st.liq);
 }
 
-document.getElementById('asl').oninput=function(){st.ai=+this.value;document.getElementById('av').textContent=ALABELS[st.ai];};
-document.getElementById('tsl').oninput=function(){st.ti=+this.value;document.getElementById('tv').textContent=TLABELS[st.ti];};
+// slider oninput handled by i18n block below
 
 function restart(){
   st.ai=0;st.goals=[];st.entity='';st.ti=3;st.horizon='';st.liq='';ms.g=[];
@@ -971,30 +970,6 @@ async function submitForm(){
   }
 }
 
-</script>
-
-<!-- CONTACT MODAL -->
-<div class="modal-overlay" id="contactModal">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal()">×</button>
-    <div id="modal-body">
-      <div class="modal-title">SMFに相談する</div>
-      <p class="modal-sub">お名前と連絡先をご入力ください。提案内容とともにSMF担当者にお送りします。</p>
-      <div class="modal-summary" id="modal-summary"></div>
-      <div class="modal-field"><label>お名前 *</label><input type="text" id="cf-name" placeholder="山田 太郎" required></div>
-      <div class="modal-field"><label>メールアドレス *</label><input type="email" id="cf-email" placeholder="taro@example.com" required></div>
-      <div class="modal-field"><label>電話番号（任意）</label><input type="tel" id="cf-tel" placeholder="090-0000-0000"></div>
-      <div class="modal-field"><label>ご質問・ご要望（任意）</label><textarea id="cf-msg" placeholder="気になる点やご質問があればお書きください"></textarea></div>
-      <button class="modal-submit" id="modal-submit-btn" onclick="submitForm()">送信する</button>
-    </div>
-    <div id="modal-sent" class="modal-sent" style="display:none">
-      <div class="modal-sent-icon">✉️</div>
-      <div class="modal-sent-title">送信しました</div>
-      <p class="modal-sent-sub">担当者より2営業日以内にご連絡いたします。<br>引き続きSMF Real Estate Navigatorをご利用ください。</p>
-    </div>
-  </div>
-</div>
-<script>
 
 // ============ i18n ============
 let LANG = 'ja';
@@ -1167,6 +1142,29 @@ document.getElementById('tsl').oninput=function(){
   document.getElementById('tv').textContent=LANG==='en'?TLABELS_EN[st.ti]:TLABELS[st.ti];
 };
 
+
 </script>
+
+<!-- CONTACT MODAL -->
+<div class="modal-overlay" id="contactModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <div id="modal-body">
+      <div class="modal-title">SMFに相談する</div>
+      <p class="modal-sub">お名前と連絡先をご入力ください。提案内容とともにSMF担当者にお送りします。</p>
+      <div class="modal-summary" id="modal-summary"></div>
+      <div class="modal-field"><label>お名前 *</label><input type="text" id="cf-name" placeholder="山田 太郎" required></div>
+      <div class="modal-field"><label>メールアドレス *</label><input type="email" id="cf-email" placeholder="taro@example.com" required></div>
+      <div class="modal-field"><label>電話番号（任意）</label><input type="tel" id="cf-tel" placeholder="090-0000-0000"></div>
+      <div class="modal-field"><label>ご質問・ご要望（任意）</label><textarea id="cf-msg" placeholder="気になる点やご質問があればお書きください"></textarea></div>
+      <button class="modal-submit" id="modal-submit-btn" onclick="submitForm()">送信する</button>
+    </div>
+    <div id="modal-sent" class="modal-sent" style="display:none">
+      <div class="modal-sent-icon">✉️</div>
+      <div class="modal-sent-title">送信しました</div>
+      <p class="modal-sent-sub">担当者より2営業日以内にご連絡いたします。<br>引き続きSMF Real Estate Navigatorをご利用ください。</p>
+    </div>
+  </div>
+</div>
 </body>
 </html>
