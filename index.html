@@ -7,57 +7,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js">
-function openModal(){
-  document.getElementById('modal-summary').textContent = window._lastSummary || '';
-  document.getElementById('cf-name').value='';
-  document.getElementById('cf-email').value='';
-  document.getElementById('cf-tel').value='';
-  document.getElementById('cf-msg').value='';
-  document.getElementById('modal-body').style.display='block';
-  document.getElementById('modal-sent').style.display='none';
-  document.getElementById('contactModal').classList.add('open');
-  document.body.style.overflow='hidden';
-}
-function closeModal(){
-  document.getElementById('contactModal').classList.remove('open');
-  document.body.style.overflow='';
-}
-document.addEventListener('click',function(e){
-  if(e.target.id==='contactModal')closeModal();
-});
-async function submitForm(){
-  const name=document.getElementById('cf-name').value.trim();
-  const email=document.getElementById('cf-email').value.trim();
-  if(!name||!email){alert('お名前とメールアドレスは必須です');return;}
-  const btn=document.getElementById('modal-submit-btn');
-  btn.disabled=true;btn.textContent='送信中...';
-  const summary=window._lastSummary||'';
-  const tel=document.getElementById('cf-tel').value.trim();
-  const msg=document.getElementById('cf-msg').value.trim();
-  try{
-    const res=await fetch('https://formspree.io/f/mgodrvnv',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Accept':'application/json'},
-      body:JSON.stringify({
-        name:name,email:email,tel:tel||'未記入',
-        message:msg||'（なし）',
-        '提案内容サマリー':summary,
-        _subject:'【RE Navigator】相談申込: '+name
-      })
-    });
-    if(res.ok){
-      document.getElementById('modal-body').style.display='none';
-      document.getElementById('modal-sent').style.display='block';
-    } else {
-      alert('送信に失敗しました。時間をおいて再度お試しください。');
-      btn.disabled=false;btn.textContent='送信する';
-    }
-  }catch(e){
-    alert('通信エラーが発生しました。');
-    btn.disabled=false;btn.textContent='送信する';
-  }
-}
-
 </script>
 <style>
 :root{
@@ -834,6 +783,58 @@ function filt(cat,btn){
   currentFilt=cat;document.querySelectorAll('.filt').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');renderComp();
 }
+
+function openModal(){
+  document.getElementById('modal-summary').textContent = window._lastSummary || '';
+  document.getElementById('cf-name').value='';
+  document.getElementById('cf-email').value='';
+  document.getElementById('cf-tel').value='';
+  document.getElementById('cf-msg').value='';
+  document.getElementById('modal-body').style.display='block';
+  document.getElementById('modal-sent').style.display='none';
+  document.getElementById('contactModal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(){
+  document.getElementById('contactModal').classList.remove('open');
+  document.body.style.overflow='';
+}
+document.addEventListener('click',function(e){
+  if(e.target.id==='contactModal')closeModal();
+});
+async function submitForm(){
+  const name=document.getElementById('cf-name').value.trim();
+  const email=document.getElementById('cf-email').value.trim();
+  if(!name||!email){alert('お名前とメールアドレスは必須です');return;}
+  const btn=document.getElementById('modal-submit-btn');
+  btn.disabled=true;btn.textContent='送信中...';
+  const summary=window._lastSummary||'';
+  const tel=document.getElementById('cf-tel').value.trim();
+  const msg=document.getElementById('cf-msg').value.trim();
+  try{
+    const res=await fetch('https://formspree.io/f/mgodrvnv',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({
+        name:name,email:email,tel:tel||'未記入',
+        message:msg||'（なし）',
+        '提案内容サマリー':summary,
+        _subject:'【RE Navigator】相談申込: '+name
+      })
+    });
+    if(res.ok){
+      document.getElementById('modal-body').style.display='none';
+      document.getElementById('modal-sent').style.display='block';
+    } else {
+      alert('送信に失敗しました。時間をおいて再度お試しください。');
+      btn.disabled=false;btn.textContent='送信する';
+    }
+  }catch(e){
+    alert('通信エラーが発生しました。');
+    btn.disabled=false;btn.textContent='送信する';
+  }
+}
+
 </script>
 
 <!-- CONTACT MODAL -->
